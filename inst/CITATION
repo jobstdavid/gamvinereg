@@ -1,0 +1,11 @@
+bibentry(bibtype = "Article",
+         title = "D-Vine GAM Copula based Quantile Regression with Application to Ensemble Postprocessing",
+         author = c(person(given = "David", family = "Jobst", email = "jobstd@uni-hildesheim.de", comment = c(ORCID = "0000-0002-2014-3530")),
+                    person(given = "Annette", family = "Möller", email = "annette.moeller@uni-bielefeld.de", comment = c(ORCID = "0000-0001-9386-1691")),
+		                person(given = "Jürgen", family = "Groß", email = "juergen.gross@uni-hildesheim.de", comment = c(ORCID = "0000-0002-3861-4708"))),
+         year = "2023",
+         journal = "arXiv",
+         publisher = "arXiv",
+         doi = "10.48550/arXiv.2309.05603",
+         header = "To cite gamvinereg in publications use:"
+)

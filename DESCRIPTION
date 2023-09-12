@@ -1,0 +1,28 @@
+Package: gamvinereg
+Type: Package
+Title: D-Vine GAM Copula based Quantile Regression
+Version: 0.1.0
+Authors@R: c(
+    person(given = "David",
+           family = "Jobst",
+           role = c("aut", "cre"),
+           email = "jobstd@uni-hildesheim.de",
+           comment = c(ORCID = "0000-0002-2014-3530")))
+Maintainer: David Jobst <jobstd@uni-hildesheim.de>
+Description: Implements D-vine GAM copula based quantile regression. 
+Imports: 
+  stats4,
+  parallel,
+  VineCopula,
+  gamCopula
+Depends:
+  gamlss,
+  gamlss.tr,
+  gamlss.cens,
+  gamlss.dist
+URL: https://github.com/jobstdavid/gamvinereg
+BugReports: https://github.com/jobstdavid/gamvinereg/issues
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.2
