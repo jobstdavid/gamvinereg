@@ -14,29 +14,29 @@ conditional copulas as described in the references.
 
 It depends on the R-packages:
 
--   [VineCopula](https://cran.r-project.org/web/packages/VineCopula/index.html),
-    [gamCopula](https://cran.r-project.org/web/packages/gamCopula/index.html):
-    Including bivariate conditional copulas, where Kendall’s $\tau$ or
-    the copula parameter is linked to a partially linear model using GAM
-    and/or spline smoothing. The bivariate conditional copula family set
-    for modeling the dependencies consists of the Gaussian, Student-t,
-    double Clayton type I-IV and double Gumbel type I-IV copula as
-    implemented in the R-package
-    [gamCopula](https://cran.r-project.org/web/packages/gamCopula/index.html).
-    The double Clayton and Gumbel copula type consist of additional
-    rotated versions of the Clayton and Gumbel copula, respectively to
-    cover negative dependence as well.
--   [gamlss](https://cran.r-project.org/web/packages/gamlss/index.html):
-    Margins can be selected from a large set of parametric distribution
-    families using general additive models for location, scale and shape
-    (GAMLSS).
--   [gamlss.tr](https://cran.r-project.org/web/packages/gamlss.tr/index.html):
-    GAMLSS extension to allow for truncated distribution families.
--   [gamlss.cens](https://cran.r-project.org/web/packages/gamlss.cens/index.html):
-    GAMLSS extension to allow for censored distribution families.
--   [gamlss.dist](https://cran.r-project.org/web/packages/gamlss.dist/index.html):
-    GAMLSS extension to allow for distribution families with transformed
-    response.
+- [VineCopula](https://cran.r-project.org/web/packages/VineCopula/index.html),
+  [gamCopula](https://cran.r-project.org/web/packages/gamCopula/index.html):
+  Including bivariate conditional copulas, where Kendall’s $\tau$ or the
+  copula parameter is linked to a partially linear model using GAM
+  and/or spline smoothing. The bivariate conditional copula family set
+  for modeling the dependencies consists of the Gaussian, Student-t,
+  double Clayton type I-IV and double Gumbel type I-IV copula as
+  implemented in the R-package
+  [gamCopula](https://cran.r-project.org/web/packages/gamCopula/index.html).
+  The double Clayton and Gumbel copula type consist of additional
+  rotated versions of the Clayton and Gumbel copula, respectively to
+  cover negative dependence as well.
+- [gamlss](https://cran.r-project.org/web/packages/gamlss/index.html):
+  Margins can be selected from a large set of parametric distribution
+  families using generalized additive models for location, scale and
+  shape (GAMLSS).
+- [gamlss.tr](https://cran.r-project.org/web/packages/gamlss.tr/index.html):
+  GAMLSS extension to allow for truncated distribution families.
+- [gamlss.cens](https://cran.r-project.org/web/packages/gamlss.cens/index.html):
+  GAMLSS extension to allow for censored distribution families.
+- [gamlss.dist](https://cran.r-project.org/web/packages/gamlss.dist/index.html):
+  GAMLSS extension to allow for distribution families with transformed
+  response.
 
 ## Installation
 
@@ -51,21 +51,20 @@ remotes::install_github("jobstdavid/gamvinereg")
 
 Below is an overview of the most important functions:
 
--   `gamvinereg`: selects most relevant predictor variables from the
-    given data to make predictions based on a D-vine GAM copula. It
-    returns an object of class `gamvinereg`. The class has the following
-    methods:
+- `gamvinereg`: selects most relevant predictor variables from the given
+  data to make predictions based on a D-vine GAM copula. It returns an
+  object of class `gamvinereg`. The class has the following methods:
 
-    -   `print`: a brief overview of the model statistics.
-    -   `summary`: a more detailed overview of the selected response
-        margin distribution and bivariate conditional copulas.
+  - `print`: a brief overview of the model statistics.
+  - `summary`: a more detailed overview of the selected response margin
+    distribution and bivariate conditional copulas.
 
--   `predict`: make predictions at a given quantile level.
+- `predict`: make predictions at a given quantile level.
 
--   `pit`: calculate the probabililty integral transformed (PIT) values
-    for the response given the predictor variables.
+- `pit`: calculate the probabililty integral transformed (PIT) values
+  for the response given the predictor variables.
 
--   `gam_control`: configuration of the bivariate conditional copula.
+- `gam_control`: configuration of the bivariate conditional copula.
 
 ## Example
 
@@ -83,10 +82,9 @@ library(gamvinereg)
 #> 
 #>     sleep
 #> Loading required package: gamlss.dist
-#> Loading required package: MASS
 #> Loading required package: nlme
 #> Loading required package: parallel
-#>  **********   GAMLSS Version 5.4-12  **********
+#>  **********   GAMLSS Version 5.4-18  **********
 #> For more on GAMLSS look at https://www.gamlss.com/
 #> Type gamlssNews() to see new features/changes/bug fixes.
 #> Loading required package: gamlss.tr

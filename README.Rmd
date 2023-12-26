@@ -23,7 +23,7 @@ An R package for D-vine copula based quantile regression using bivariate conditi
 It depends on the R-packages:
 
 - [VineCopula](https://cran.r-project.org/web/packages/VineCopula/index.html), [gamCopula](https://cran.r-project.org/web/packages/gamCopula/index.html): Including bivariate conditional copulas, where Kendall's $\tau$ or the copula parameter is linked to a partially linear model using GAM and/or spline smoothing. The bivariate conditional copula family set for modeling the dependencies consists of the Gaussian, Student-t, double Clayton type I-IV and double Gumbel type I-IV copula as implemented in the R-package [gamCopula](https://cran.r-project.org/web/packages/gamCopula/index.html). The double Clayton and Gumbel copula type consist of additional rotated versions of the Clayton and Gumbel copula, respectively to cover negative dependence as well.
-- [gamlss](https://cran.r-project.org/web/packages/gamlss/index.html): Margins can be selected from a large set of parametric distribution families using general additive models for location, scale and shape (GAMLSS).
+- [gamlss](https://cran.r-project.org/web/packages/gamlss/index.html): Margins can be selected from a large set of parametric distribution families using generalized additive models for location, scale and shape (GAMLSS).
 - [gamlss.tr](https://cran.r-project.org/web/packages/gamlss.tr/index.html): GAMLSS extension to allow for truncated distribution families.
 - [gamlss.cens](https://cran.r-project.org/web/packages/gamlss.cens/index.html): GAMLSS extension to allow for censored distribution families.
 - [gamlss.dist](https://cran.r-project.org/web/packages/gamlss.dist/index.html): GAMLSS extension to allow for distribution families with transformed response.
