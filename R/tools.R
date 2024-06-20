@@ -430,10 +430,10 @@ finalize_vinereg_object <- function(formula, control_formula, model_frame, margi
   var_cbic <- -2 * var_cll + log(nobs) * var_edf
   var_p_value <- pchisq(2 * var_cll, var_edf, lower.tail = FALSE)
   var_p_value[1] <- NA
-  cll <- sum(var_cll)
-  edf <- sum(var_edf)
-  caic <- sum(var_caic)
-  cbic <- sum(var_cbic)
+  cll <- sum(var_cll, na.rm = TRUE)
+  edf <- sum(var_edf, na.rm = TRUE)
+  caic <- sum(var_caic, na.rm = TRUE)
+  cbic <- sum(var_cbic, na.rm = TRUE)
 
   stats <- list(
     nobs = nobs,

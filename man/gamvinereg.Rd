@@ -62,8 +62,9 @@ An object of class \code{gamvinereg}. It is a list containing the elements
   algorithm.}
   \item{selected_vars}{indices of selected variables.}}
 Use the \code{\link{predict.gamvinereg}} function to predict conditional quantiles.
-Furthermore, apply the \code{\link{pit}} function to calculate the conditional
-probability integral transform (PIT) values.
+Furthermore, apply the \code{\link{cpit}} function to calculate the conditional
+probability integral transform (PIT) values. Additionally, use the
+\code{\link{cpdf}} function to calculate the conditional density values.
 The \code{summary} function of a \code{gamvinereg} object shows the contribution of
 each selected variable with the associated p-value derived from a likelihood ratio test.
 }
@@ -135,10 +136,10 @@ margins <- list(
                        uscale = TRUE))
 
 # predict median
-med <- predict(object1, newdata = station, alpha = 0.5)
+med <- predict(object1, alpha = 0.5)
 
 # predict deciles
-dec <- predict(object2, newdata = station, alpha = 1:9/10)
+dec <- predict(object2, alpha = 1:9/10)
 
 # predict quartiles
 q <- predict(object3, newdata = ustation, alpha = c(0.25, 0.75))

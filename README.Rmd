@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/gamvinereg)](https://CRAN.R-project.org/package=gamvinereg)
 [![R-CMD-check](https://github.com/jobstdavid/gamvinereg/workflows/R-CMD-check/badge.svg)](https://github.com/jobstdavid/gamvinereg/actions)
-[![version](https://img.shields.io/badge/version-0.1.0-green.svg?style=flat)](https://github.com/jobstdavid/gamvinereg)
+[![version](https://img.shields.io/badge/version-0.2.0-green.svg?style=flat)](https://github.com/jobstdavid/gamvinereg)
 <!-- badges: end -->
 
 An R package for D-vine copula based quantile regression using bivariate conditional copulas as described in the references.  
@@ -49,7 +49,8 @@ Below is an overview of the most important functions:
   - ``summary``: a more detailed overview of the selected response margin distribution and bivariate conditional copulas. 
   
 - ``predict``: make predictions at a given quantile level.
-- ``pit``: calculate the probabililty integral transformed (PIT) values for the response given the predictor variables.
+- ``cpit``: calculate the conditional probabililty integral transformed (PIT) values for the response given the predictor variables.
+- ``cpdf``: calculate the conditional density values for the response given the predictor variables.
 - ``gam_control``: configuration of the bivariate conditional copula.
 
 ## Example
@@ -117,13 +118,22 @@ med <- predict(object, newdata = station, alpha = 0.5)
 dec <- predict(object, newdata = station, alpha = 1:9/10)
 ```
 
-### Calculate PIT values
+### Calculate conditional PIT values
 ```{r example5, fig.align = "center", out.width = "75%"}
-# calculate PIT values
-u <- pit(object, newdata = station)
+# calculate conditional PIT values
+u <- cpit(object, newdata = station)
 # should be approximately uniform
-hist(u, prob = TRUE)
+hist(u, probability = TRUE)
 ```
+
+### Calculate conditional density values
+```{r example6, fig.align = "center", out.width = "75%"}
+# calculate conditional density values
+d <- cpdf(object)
+# calculate logarithmic score (negative log-likelihood)
+sum(-log(d))
+```
+
 
 ## Contact
 Feel free to contact [jobstd@uni-hildesheim.de](mailto:jobstd@uni-hildesheim.de) if you have any questions or suggestions.

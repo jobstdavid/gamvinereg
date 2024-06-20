@@ -3,7 +3,7 @@
 #' Calculates the conditional distribution of the response given the covariates.
 #'
 #' @param object an object of class \code{gamvinereg}.
-#' @param newdata data frame of response variable and its covariates for which to predict the PIT values.
+#' @param newdata data frame of response variable and its covariates.
 #' @param cores integer; the number of cores used for computations.
 #' Default setting is \code{cores = 1}.
 #' @param ... unused.
@@ -16,9 +16,6 @@
 #'
 #' # formula for gamvinereg
 #' formula <- obs ~ t2m_mean + t2m_sd
-#'
-#' # data transformation to uniform scale
-#' ustation <- as.data.frame(VineCopula::pobs(station[, all.vars(formula)]))
 #'
 #' ## generate margin distributions
 #' # generate left-truncated at 0 normal distribution
@@ -62,13 +59,13 @@
 #'                       margins = margins))
 #'
 #' # calculate PIT values
-#' u <- pit(object, newdata = station)
+#' u <- cpit(object)
 #' # should be approximately uniform
 #' hist(u, prob = TRUE)
 #'
 #'
 #' @export
-pit <- function(object, newdata, cores = 1, ...) {
+cpit <- function(object, newdata, cores = 1, ...) {
 
   # criterion for checking if data is already in [0,1]
   uscale <- is.na(object$stats$var_cll[1])
@@ -91,17 +88,16 @@ pit <- function(object, newdata, cores = 1, ...) {
 
   }
 
-  # create output vector
-  output <- rep(NA, nrow(newdata))
-
-  # subset data frame
-  if (!missing(newdata)) {
-    mf <- model.frame(dummy_formula, newdata, na.action = NULL)
-    cc <- complete.cases(mf)
-    mf <- mf[cc, ]
+  if (missing(newdata)) {
+    mf <- model.frame(dummy_formula, object$model_frame, na.action = na.pass)
   } else {
-    mf <- model.frame(dummy_formula, parent.frame(), na.action = NULL)
+    mf <- model.frame(dummy_formula, newdata, na.action = na.pass)
   }
+  # create output vector
+  output <- rep(NA, nrow(mf))
+  # subset data frame
+  cc <- complete.cases(mf[, -1])
+  mf <- mf[cc, ]
 
   # GAM copula variables
   x <- mf[, all.vars(object$gam_formula), drop = FALSE]

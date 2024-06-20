@@ -74,17 +74,17 @@
 #'                        uscale = TRUE))
 #'
 #' # predict median
-#' med <- predict(object1, newdata = station, alpha = 0.5)
+#' med <- predict(object1, alpha = 0.5)
 #'
 #' # predict deciles
-#' dec <- predict(object2, newdata = station, alpha = 1:9/10)
+#' dec <- predict(object2, alpha = 1:9/10)
 #'
 #' # predict quartiles
 #' q <- predict(object3, newdata = ustation, alpha = c(0.25, 0.75))
 #'
 #'
 #'
-#' @importFrom stats complete.cases
+#' @importFrom stats complete.cases na.pass
 #' @export
 predict.gamvinereg <- function(object, newdata, alpha = 0.5, cores = 1, ...) {
 
@@ -109,17 +109,16 @@ predict.gamvinereg <- function(object, newdata, alpha = 0.5, cores = 1, ...) {
 
   }
 
-
-  # create output data.frame
-  output <- as.data.frame(matrix(NA, nrow = nrow(newdata), ncol = length(alpha), dimnames = list(c(), alpha)))
-  # subset data frame
-  if (!missing(newdata)) {
-    mf <- model.frame(dummy_formula, newdata, na.action = NULL)
-    cc <- complete.cases(mf[, -1])
-    mf <- mf[cc, ]
+  if (missing(newdata)) {
+    mf <- model.frame(dummy_formula, object$model_frame, na.action = na.pass)
   } else {
-    mf <- model.frame(dummy_formula, parent.frame(), na.action = NULL)
+    mf <- model.frame(dummy_formula, newdata, na.action = na.pass)
   }
+  # create output data.frame
+  output <- as.data.frame(matrix(NA, nrow = nrow(mf), ncol = length(alpha), dimnames = list(c(), alpha)))
+  # subset data frame
+  cc <- complete.cases(mf[, -1])
+  mf <- mf[cc, ]
 
   # GAM copula variables
   x <- mf[, all.vars(object$gam_formula), drop = FALSE]
@@ -170,7 +169,7 @@ get_pits <- function(olddata, newdata, margins, uscale, cores = 1) {
       m <- margins[[k]]
       y <- as.numeric(newdata[, vars[k]])
       # estimate in-sample parameters
-      if(class(m$y) == "Surv") {
+      if(inherits(m$y, "Surv")) {
         par <- lapply(1:length(m$parameters), function(k) predict(object = m,
                                                                   newdata = newdata,
                                                                   data = olddata,
@@ -214,6 +213,53 @@ get_pits <- function(olddata, newdata, margins, uscale, cores = 1) {
   return(u)
 
 }
+get_density <- function(olddata, newdata, margins, uscale, cores = 1) {
+
+  d <- length(margins)
+  vars <- names(margins)
+
+  if (!uscale) {
+
+    dens <- mclapply(1:d, function(k) {
+
+      m <- margins[[k]]
+      y <- as.numeric(newdata[, vars[k]])
+      # estimate in-sample parameters
+      if(inherits(m$y, "Surv")) {
+        par <- lapply(1:length(m$parameters), function(k) predict(object = m,
+                                                                  newdata = newdata,
+                                                                  data = olddata,
+                                                                  what = m$parameters[k],
+                                                                  type = "response"))
+        assign(vars[k], y)
+        y <- eval(m$mu.formula[[2]])
+        par <- c(list(y), par)
+        names(par) <- c("x", m$parameters)
+
+      } else {
+        par <- predictAll(object = m,
+                          newdata = newdata,
+                          data = olddata,
+                          type = "response")[m$parameters]
+        par <- c(list(y), par)
+        names(par) <- c("x", m$parameters)
+      }
+      # get in-sample u-data of y
+      dens <- as.numeric(do.call(paste0("d", m$family[1]), par))
+      dens
+
+    }, mc.cores = cores)
+
+  } else {
+
+    dens <- rep(1, nrow(newdata))
+
+  }
+
+  return(dens)
+
+}
+
 #'
 #' calculate quantiles from conditional D-vine GAM copula
 #' @noRd
@@ -311,7 +357,7 @@ qdvine <- function(u, x, vine, alpha, cores = 1) {
 #' transform uniform data back to response scale
 #' @noRd
 to_yscale <- function(model, olddata, newdata, q) {
-  if(class(model$y) == "Surv") {
+  if(inherits(model$y, "Surv")) {
     par <- lapply(1:length(model$parameters), function(k) predict(object = model,
                                                                   newdata = newdata,
                                                                   data = olddata,

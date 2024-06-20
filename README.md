@@ -6,7 +6,7 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/gamvinereg)](https://CRAN.R-project.org/package=gamvinereg)
 [![R-CMD-check](https://github.com/jobstdavid/gamvinereg/workflows/R-CMD-check/badge.svg)](https://github.com/jobstdavid/gamvinereg/actions)
-[![version](https://img.shields.io/badge/version-0.1.0-green.svg?style=flat)](https://github.com/jobstdavid/gamvinereg)
+[![version](https://img.shields.io/badge/version-0.2.0-green.svg?style=flat)](https://github.com/jobstdavid/gamvinereg)
 <!-- badges: end -->
 
 An R package for D-vine copula based quantile regression using bivariate
@@ -61,8 +61,11 @@ Below is an overview of the most important functions:
 
 - `predict`: make predictions at a given quantile level.
 
-- `pit`: calculate the probabililty integral transformed (PIT) values
-  for the response given the predictor variables.
+- `cpit`: calculate the conditional probabililty integral transformed
+  (PIT) values for the response given the predictor variables.
+
+- `cpdf`: calculate the conditional density values for the response
+  given the predictor variables.
 
 - `gam_control`: configuration of the bivariate conditional copula.
 
@@ -84,7 +87,7 @@ library(gamvinereg)
 #> Loading required package: gamlss.dist
 #> Loading required package: nlme
 #> Loading required package: parallel
-#>  **********   GAMLSS Version 5.4-18  **********
+#>  **********   GAMLSS Version 5.4-22  **********
 #> For more on GAMLSS look at https://www.gamlss.com/
 #> Type gamlssNews() to see new features/changes/bug fixes.
 #> Loading required package: gamlss.tr
@@ -168,16 +171,26 @@ med <- predict(object, newdata = station, alpha = 0.5)
 dec <- predict(object, newdata = station, alpha = 1:9/10)
 ```
 
-### Calculate PIT values
+### Calculate conditional PIT values
 
 ``` r
-# calculate PIT values
-u <- pit(object, newdata = station)
+# calculate conditional PIT values
+u <- cpit(object, newdata = station)
 # should be approximately uniform
-hist(u, prob = TRUE)
+hist(u, probability = TRUE)
 ```
 
 <img src="man/figures/README-example5-1.png" width="75%" style="display: block; margin: auto;" />
+
+### Calculate conditional density values
+
+``` r
+# calculate conditional density values
+d <- cpdf(object)
+# calculate logarithmic score (negative log-likelihood)
+sum(-log(d))
+#> [1] 3454.46
+```
 
 ## Contact
 
