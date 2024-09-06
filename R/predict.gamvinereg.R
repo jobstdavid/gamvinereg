@@ -101,11 +101,13 @@ predict.gamvinereg <- function(object, newdata, alpha = 0.5, cores = 1, ...) {
     control_predictors <- all.vars(object$gam_formula)
     additional_predictors <- c(margins_predictors, control_predictors)
     dummy_formula <- update(object$formula, reformulate(c(".", additional_predictors)))
+    dummy_formula <- update(dummy_formula, NULL ~ .)
 
   } else {
 
     control_predictors <- all.vars(object$gam_formula)
     dummy_formula <- update(object$formula, reformulate(c(".", control_predictors)))
+    dummy_formula <- update(dummy_formula, NULL ~ .)
 
   }
 
@@ -117,7 +119,7 @@ predict.gamvinereg <- function(object, newdata, alpha = 0.5, cores = 1, ...) {
   # create output data.frame
   output <- as.data.frame(matrix(NA, nrow = nrow(mf), ncol = length(alpha), dimnames = list(c(), alpha)))
   # subset data frame
-  cc <- complete.cases(mf[, -1])
+  cc <- complete.cases(mf)
   mf <- mf[cc, ]
 
   # GAM copula variables
@@ -170,21 +172,21 @@ get_pits <- function(olddata, newdata, margins, uscale, cores = 1) {
       y <- as.numeric(newdata[, vars[k]])
       # estimate in-sample parameters
       if(inherits(m$y, "Surv")) {
-        par <- lapply(1:length(m$parameters), function(k) predict(object = m,
-                                                                  newdata = newdata,
-                                                                  data = olddata,
-                                                                  what = m$parameters[k],
-                                                                  type = "response"))
+        par <- suppressWarnings(lapply(1:length(m$parameters), function(j) predict(object = m,
+                                                                                   newdata = newdata,
+                                                                                   data = olddata,
+                                                                                   what = m$parameters[j],
+                                                                                   type = "response")))
         assign(vars[k], y)
         y <- eval(m$mu.formula[[2]])
         par <- c(list(y), par)
         names(par) <- c("q", m$parameters)
 
       } else {
-        par <- predictAll(object = m,
-                          newdata = newdata,
-                          data = olddata,
-                          type = "response")[m$parameters]
+        par <- suppressWarnings(predictAll(object = m,
+                                           newdata = newdata,
+                                           data = olddata,
+                                           type = "response")[m$parameters])
         par <- c(list(y), par)
         names(par) <- c("q", m$parameters)
       }
@@ -226,10 +228,10 @@ get_density <- function(olddata, newdata, margins, uscale, cores = 1) {
       y <- as.numeric(newdata[, vars[k]])
       # estimate in-sample parameters
       if(inherits(m$y, "Surv")) {
-        par <- lapply(1:length(m$parameters), function(k) predict(object = m,
+        par <- lapply(1:length(m$parameters), function(j) predict(object = m,
                                                                   newdata = newdata,
                                                                   data = olddata,
-                                                                  what = m$parameters[k],
+                                                                  what = m$parameters[j],
                                                                   type = "response"))
         assign(vars[k], y)
         y <- eval(m$mu.formula[[2]])
@@ -274,6 +276,7 @@ qdvine <- function(u, x, vine, alpha, cores = 1) {
   V <- array(NA, dim = c(d, d, n))
   V[d, -1, ] <- t(u)
   V2 <- V
+
   if (d > 2) {
     for (j in (d - 1):2) {
       for (k in (d - 1):j) {

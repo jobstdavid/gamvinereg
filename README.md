@@ -187,9 +187,9 @@ hist(u, probability = TRUE)
 ``` r
 # calculate conditional density values
 d <- cpdf(object)
-# calculate logarithmic score (negative log-likelihood)
-sum(-log(d))
-#> [1] 3454.46
+# calculate log-likelihood
+sum(log(d))
+#> [1] -3454.46
 ```
 
 ## Contact

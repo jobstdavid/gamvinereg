@@ -162,7 +162,7 @@ gamvinereg <- function(formula, data, margins, selcrit = "AIC", control = gam_co
 
   # marginal variables
   vars <- all.vars(formula)
-  d <- length(vars)
+  d <- length(vars)-1
   # GAM copula variables
   x <- mf[, all.vars(control$formula), drop = FALSE]
 
@@ -189,9 +189,9 @@ gamvinereg <- function(formula, data, margins, selcrit = "AIC", control = gam_co
   if (any(is.na(order))) {
 
     # sequential forward variable selection algorithm
-    for (i in seq_len(d - 1)) {
-      new_fits <- mclapply(status$remaining_vars + 1, function(k) {
-        xtnd_vine(new_var = u[, k],
+    for (i in seq_len(d)) {
+      new_fits <- mclapply(status$remaining_vars, function(k) {
+        xtnd_vine(new_var = u[, k+1],
                   old_fit = current_fit,
                   control = control,
                   selcrit = selcrit,
@@ -210,6 +210,7 @@ gamvinereg <- function(formula, data, margins, selcrit = "AIC", control = gam_co
 
       # select 'best' fit
       current_fit <- new_fits[[status$best_ind]]
+
     }
 
     # update selected variables

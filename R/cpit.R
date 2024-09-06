@@ -61,7 +61,7 @@
 #' # calculate PIT values
 #' u <- cpit(object)
 #' # should be approximately uniform
-#' hist(u, prob = TRUE)
+#' hist(u, probability = TRUE)
 #'
 #'
 #' @export
@@ -96,7 +96,7 @@ cpit <- function(object, newdata, cores = 1, ...) {
   # create output vector
   output <- rep(NA, nrow(mf))
   # subset data frame
-  cc <- complete.cases(mf[, -1])
+  cc <- complete.cases(mf)
   mf <- mf[cc, ]
 
   # GAM copula variables

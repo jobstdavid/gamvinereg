@@ -1,3 +1,8 @@
+# gamvinereg 0.3.0 (September 6, 2024)
+
+-   Small changes in documentation.
+-   Slightly adapted code.
+
 # gamvinereg 0.2.0 (June 20, 2024)
 
 -   Added function `cpdf` for conditional density function.

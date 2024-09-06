@@ -130,8 +130,8 @@ hist(u, probability = TRUE)
 ```{r example6, fig.align = "center", out.width = "75%"}
 # calculate conditional density values
 d <- cpdf(object)
-# calculate logarithmic score (negative log-likelihood)
-sum(-log(d))
+# calculate log-likelihood
+sum(log(d))
 ```
 
 

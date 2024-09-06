@@ -4,7 +4,7 @@
 #'
 #' @param object an object of class \code{gamvinereg}.
 #' @param newdata data frame of response variable and its covariates.
-#' @param log logical; if TRUE, probabilites p are given als log(p).
+#' @param log logical; if TRUE, probabilites p are given as log(p).
 #' @param cores integer; the number of cores used for computations.
 #' Default setting is \code{cores = 1}.
 #' @param ... unused.
@@ -96,7 +96,7 @@ cpdf <- function(object, newdata, log = FALSE, cores = 1, ...) {
   # create output vector
   output <- rep(NA, nrow(mf))
   # subset data frame
-  cc <- complete.cases(mf[, -1])
+  cc <- complete.cases(mf)
   mf <- mf[cc, ]
   dens <- rep(1, nrow(mf))
 
@@ -158,10 +158,6 @@ cpdf <- function(object, newdata, log = FALSE, cores = 1, ...) {
         psobs$direct[i, i, ] <- BiCopHfunc2(u1 = u_e[, 1], u2 = u_e[, 2], family = family, par = par, par2 = par2)
         psobs$indirect[i, i, ] <- BiCopHfunc1(u1 = u_e[, 1], u2 = u_e[, 2], family = family, par = par, par2 = par2)
 
-        if (i == 1) {
-          dens <- BiCopPDF(u1 = u_e[, 1], u2 = u_e[, 2], family = family, par = par, par2 = par2)
-        }
-
       } else if (family %in% c(301:304, 401:404)) {
 
         # update family
@@ -170,10 +166,10 @@ cpdf <- function(object, newdata, log = FALSE, cores = 1, ...) {
         psobs$direct[i, i, ] <- BiCopHfunc2(u1 = u_e[, 1], u2 = u_e[, 2], family = family, par = par, par2 = par2)
         psobs$indirect[i, i, ] <- BiCopHfunc1(u1 = u_e[, 1], u2 = u_e[, 2], family = family, par = par, par2 = par2)
 
-        if (i == 1) {
-          dens <- BiCopPDF(u1 = u_e[, 1], u2 = u_e[, 2], family = family, par = par, par2 = par2)
-        }
+      }
 
+      if (i == 1) {
+        dens <- BiCopPDF(u1 = u_e[, 1], u2 = u_e[, 2], family = family, par = par, par2 = par2)
       }
 
     }
@@ -193,7 +189,7 @@ cpdf <- function(object, newdata, log = FALSE, cores = 1, ...) {
                                     newdata = mf,
                                     margins = object$margins$models[c(names(object$margins$models)[1])],
                                     uscale = uscale,
-                                    cores = cores))
+                                    cores = 1))
 
   if (log) {
     dens <- log(dens)

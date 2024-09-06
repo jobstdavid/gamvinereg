@@ -240,10 +240,7 @@ update_status <- function(status, new_vines) {
       status$selected_vars,
       status$remaining_vars[status$best_ind]
     )
-    status$remaining_vars <- setdiff(
-      status$remaining_vars,
-      status$selected_vars
-    )
+    status$remaining_vars <- status$remaining_vars[-status$best_ind]
     status$clls = c(status$clls, clls[status$best_ind])
     status$edf = c(status$edf, edf[status$best_ind])
   }
@@ -294,7 +291,7 @@ xtnd_vine <- function(new_var, old_fit, control, selcrit = "AIC", x, cores = 1) 
 
     # estimate bivariate GAM copula
     pc_fit <- mclapply(1:length(control$family_set), function(k)  {
-
+      tryCatch({
       gamBiCopFit(data = u_e,
                   formula = control$formula,
                   family = control$family_set[k],
@@ -303,8 +300,11 @@ xtnd_vine <- function(new_var, old_fit, control, selcrit = "AIC", x, cores = 1) 
                   tol.rel = control$tol.rel,
                   n.iters = control$n.iters,
                   verbose = FALSE)
-
+      }, error = function(e) {NULL})
     }, mc.cores = cores)
+
+    # For removing NULL-entries (as a consequence of the "tryCatch"-function!)
+    pc_fit <- Filter(length, pc_fit)
 
     val.selcrit <- sapply(1:length(pc_fit), function(k) do.call(selcrit, list(pc_fit[[k]]$res)))
     if (selcrit == "logLik") {
@@ -418,9 +418,9 @@ check_order <- function(order, var_nms) {
 finalize_vinereg_object <- function(formula, control_formula, model_frame, margins, vine, status, var_nms) {
 
   # adjust model matrix and names
-  reorder <- status$selected_vars
-  reorder[order(reorder)] <- seq_along(status$selected_vars)
-  vine$names <- c(var_nms[1], names(reorder)[reorder])
+  # reorder <- status$selected_vars
+  # reorder[order(reorder)] <- seq_along(status$selected_vars)
+  # vine$names <- c(var_nms[1], names(reorder)[reorder])
 
   # compute fit statistics
   nobs <- nrow(model_frame)

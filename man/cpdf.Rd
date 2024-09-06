@@ -11,7 +11,7 @@ cpdf(object, newdata, log = FALSE, cores = 1, ...)
 
 \item{newdata}{data frame of response variable and its covariates.}
 
-\item{log}{logical; if TRUE, probabilites p are given als log(p).}
+\item{log}{logical; if TRUE, probabilites p are given as log(p).}
 
 \item{cores}{integer; the number of cores used for computations.
 Default setting is \code{cores = 1}.}

@@ -1,7 +1,7 @@
 Package: gamvinereg
 Type: Package
 Title: D-Vine GAM Copula based Quantile Regression
-Version: 0.2.0
+Version: 0.3.0
 Authors@R: c(
     person(given = "David",
            family = "Jobst",

@@ -73,7 +73,7 @@ margins <- list(
 # calculate PIT values
 u <- cpit(object)
 # should be approximately uniform
-hist(u, prob = TRUE)
+hist(u, probability = TRUE)
 
 
 }
